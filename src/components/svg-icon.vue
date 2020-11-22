@@ -25,7 +25,6 @@ export default {
   },
   setup() {
     const iconName = computed(async () => {
-      console.log(this.iconClass)
       return `#icon-${this?.iconClass}`
     })
     const svgClass = computed(() => {
