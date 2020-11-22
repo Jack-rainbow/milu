@@ -1,0 +1,7 @@
+// 动画
+
+@mixin transition($transition...) {
+  @if $enable-transitions {
+    transition: $transition;
+  }
+}

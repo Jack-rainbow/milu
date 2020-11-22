@@ -1,0 +1,26 @@
+# docs： https://docs.travis-ci.com/user/tutorial/#to-get-started-with-travis-ci-using-github
+# https://config.travis-ci.com/
+#  github-actions-docs:http://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html
+branches:
+  only:
+    - master
+
+stages:
+  - noop
+
+language: node_js
+node_js:
+  - '12.16.0'
+  
+cache: yarn
+
+cache:
+  directories:
+    - 'node_modules'
+
+jobs_noop:
+  stage: noop
+  tags:
+    - milu
+  script:
+    - echo 'milu'

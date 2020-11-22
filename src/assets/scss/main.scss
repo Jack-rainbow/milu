@@ -1,0 +1,20 @@
+
+//全局变量
+@import "core/variables.scss";
+
+//函数
+@import "core/mixins.scss";
+
+//基于 normalize 重置样式
+@import "core/normalize.scss";
+//自定义重置样式
+@import "core/reset.scss";
+
+//组件
+
+//实用工具类样式
+@import "core/utilities//position.scss"; // * 定位
+@import "core/utilities/clearfix.scss"; // * 浮动
+
+//各模块样式
+@import "modules/icons.scss";

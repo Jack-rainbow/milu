@@ -1,0 +1,69 @@
+{
+  "name": "learn3.0",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "vue-cli-service build",
+    "dev": "vue-cli-service serve",
+    "test": "npm run build",
+    "lint": "eslint \"src/**/*.@(js|vue)\" --fix && stylelint src/**/*.{vue,scss} --fix && prettier src/**/*.{md,json} -w",
+    "commit": "npx git-cz"
+  },
+  "dependencies": {
+    "ant-design-vue": "^2.0.0-rc.1",
+    "core-js": "^3.6.5",
+    "prettier": "^2.2.0",
+    "vue": "^3.0.0",
+    "vue-class-component": "^8.0.0-0",
+    "vue-router": "^4.0.0-alpha.6",
+    "vuex": "^4.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "stylelint": "^13.8.0",
+    "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.18.0",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "axios": "^0.21.0",
+    "babel-plugin-import": "^1.13.1",
+    "eslint": "^7.13.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^7.0.0-alpha.0",
+    "husky": "^4.3.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-resources-loader": "^1.4.1",
+    "typescript": "~3.9.3",
+    "vue-cli-plugin-style-resources-loader": "^0.1.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
+      "post-commit": "git update-index --again"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint --rule 'no-console: [\"error\",{allow: [\"error\"]}]' --fix"
+    ],
+    "*.{vue,less}": [
+      "stylelint --fix"
+    ],
+    "*.{json}": [
+      "prettier --write"
+    ]
+  }
+}
