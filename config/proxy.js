@@ -1,19 +1,20 @@
-const list = ["user", "MTSService"];
+/*eslint-disable */
+const list = ["user", "MTSService"]
 const proxy = list.reduce(
   (proxy, key) => ({
     ...proxy,
     [`/${key}/*`]: {
       target: "",
       changeOrigin: true,
-      secure: false
-    }
+      secure: false,
+    },
   }),
   {}
-);
+)
 
-module.exports = config => {
+module.exports = (config) => {
   config.devServer = {
     proxy,
-    disableHostCheck: true
-  };
-};
+    disableHostCheck: true,
+  }
+}
