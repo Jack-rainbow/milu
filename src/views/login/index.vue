@@ -15,7 +15,7 @@
                 使用微信登录
               </div>
               <div>
-                <HomeOutlined />
+                <MailOutlined />
                 使用微博登录
               </div>
             </div>
@@ -54,19 +54,25 @@
 </template>
 
 <script>
-// import { ref } from 'vue'
+import { defineComponent, ref } from "vue"
+import { HomeOutlined, MailOutlined, UserOutlined } from "@ant-design/icons-vue"
 
-export default {
+export default defineComponent({
   name: "login",
+  components: {
+    MailOutlined,
+    HomeOutlined,
+    UserOutlined,
+  },
   setup() {
-    const userName = ""
-    const value = ""
+    const userName = ref("")
+    const value = ref("")
     return {
       userName,
       value,
     }
   },
-}
+})
 </script>
 <style lang="scss" scoped>
 .login {
