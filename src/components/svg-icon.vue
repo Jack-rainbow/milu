@@ -1,8 +1,11 @@
 <template>
-  <svg :class="svgClass"
-    aria-hidden="true">
-    <use :xlink:href='iconName'></use>
-  </svg>
+  <div>
+    <svg :class="svgClass"
+      aria-hidden="true">
+      <use :href='`#${iconClass}`'></use>
+    </svg>
+
+  </div>
 </template>
 
 <script>
@@ -24,21 +27,17 @@ export default {
     },
   },
   setup() {
-    const iconName = computed(async () => {
-      return `#icon-${this?.iconClass}`
-    })
     const svgClass = computed(() => {
-      return `svg-icon ${this?.className ? this?.className : ""}`
+      return `svg-icon ${this?.className ? this?.className : ""} iconfont`
     })
     return {
-      iconName,
       svgClass,
     }
   },
 }
 </script>
 
-<style type="text/css">
+<style>
 .svg-icon {
   width: 1em;
   height: 1em;
