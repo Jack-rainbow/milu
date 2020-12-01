@@ -1,5 +1,5 @@
 /*eslint-disable */
-const { isProduction, resolve } = require("./utils")
+const { isProduction, resolve, dir } = require("./utils")
 const useAlias = require("./use-alias")
 const configureExtend = require("./configure-extend")
 // 打包包时间分析
@@ -11,6 +11,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin")
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin")
 
+// 参考链接：https://zhuanlan.zhihu.com/p/42465502
 
 // page title
 const PAGE_NAME = "米鹿"
@@ -19,16 +20,20 @@ const PAGE_NAME = "米鹿"
 const externals = {
     vue: "Vue",
     vuex: "Vuex",
+    vueRouter: 'vue-router',
     axios: "axios",
 }
-
+const path = require("path");
 const config = smp.wrap({
     name: PAGE_NAME,
     output: {
-        filename: "bundle.js",
+        // path: resolve("static"),
+        filename: "[name].dll.js",
+        // library: "[name]_library",
     },
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".json", "ts", "tsx"],
+        modules: [resolve("node_modules")],
         alias: {
             set(name, path) {
                 this[name] = path
@@ -40,28 +45,30 @@ const config = smp.wrap({
     // 在生产环境下为 Babel 和 TypeScript 使用 `thread-loader`
     // 在多核机器下会默认开启。
     // parallel: require("os").cpus().length > 1,
-    plugins: isProduction? [
+    plugins: isProduction
+        ? [
+              // 提升二次构建速度
+              new HardSourceWebpackPlugin(),
 
-        // 提升二次构建速度
-        new HardSourceWebpackPlugin(),
+              new BundleAnalyzerPlugin(),
+              // 查找重复包
+              new DuplicatePackageCheckerPlugin(),
 
-        new BundleAnalyzerPlugin(),
-        // 查找重复包
-        new DuplicatePackageCheckerPlugin(),
+              //使用 DLLPlugin 进行分包(暂时是不成功的)
+              new webpack.DllPlugin({
+                  name: "_dll_[name]", //该字段的值也就是输出的 manifest.json 文件 中 name 字段的值 例如 library.manifest.json 中就有 "name": "_dll_library"
+                  path: resolve("./build/library/[name].manifest.json"), //
+              }),
+              //
 
-        //使用 DLLPlugin 进行分包
-        new webpack.DllPlugin({
-            name: "_dll_[name]", //该字段的值也就是输出的 manifest.json 文件 中 name 字段的值 例如 library.manifest.json 中就有 "name": "_dll_library"
-            path: resolve("./build/library/[name].manifest.json"), //
-        }),
+              // moment  只打包中文包
+              new MomentLocalesPlugin({
+                  localesToKeep: ["zh-cn"],
+              }),
 
-        // moment  只打包中文包
-        new MomentLocalesPlugin({
-            localesToKeep: ["zh-cn"],
-        }),
-
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
-    ] : [],
+              new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
+          ]
+        : [],
     ...configureExtend,
 })
 

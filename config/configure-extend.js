@@ -66,6 +66,12 @@ module.exports = {
                     test: /[\\/]node_modules[\\/]vue[\\/]/,
                     name: "chunk-vue",
                 },
+                // commons 部分的作用是分离出 node_modules 中引入的模块
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendors",
+                    chunks: "all",
+                },
                 // 拆分Vendor
                 // vendor: {
                 //     test: /[\\/]node_modules[\\/]/,
