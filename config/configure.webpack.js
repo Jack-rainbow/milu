@@ -40,7 +40,8 @@ const config = smp.wrap({
     // 在生产环境下为 Babel 和 TypeScript 使用 `thread-loader`
     // 在多核机器下会默认开启。
     // parallel: require("os").cpus().length > 1,
-    plugins: [
+    plugins: isProduction? [
+
         // 提升二次构建速度
         new HardSourceWebpackPlugin(),
 
@@ -60,7 +61,7 @@ const config = smp.wrap({
         }),
 
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
-    ],
+    ] : [],
     ...configureExtend,
 })
 
