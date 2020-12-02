@@ -12,6 +12,7 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin")
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin")
 const CompressionPlugin = require("compression-webpack-plugin")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 参考链接：https://zhuanlan.zhihu.com/p/42465502
 // page title
 const PAGE_NAME = "米鹿"
@@ -20,8 +21,9 @@ const PAGE_NAME = "米鹿"
 const externals = {
     vue: "Vue",
     vuex: "Vuex",
-    vueRouter: "vue-router",
+    "vue-router": "vue-router",
     axios: "axios",
+    moment: "moment",
 }
 const config = smp.wrap({
     name: PAGE_NAME,
@@ -83,6 +85,7 @@ const config = smp.wrap({
               //       //   algorithm: "gzip", //开启gzip
               //       test: /\.js$|\.html$|\.css/,
               //   }),
+              new HtmlWebpackPlugin(),
               new LodashModuleReplacementPlugin(), //优化lodash
               new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
           ]

@@ -60,7 +60,8 @@ module.exports = {
         // 优化配置
         runtimeChunk: "single",
         splitChunks: {
-            chunks: "async",
+            // initial 入口chunk，对于异步导入的文件不处理,async 异步chunk，只对异步导入的文件处理（个人理解）. all 全部chunk
+            chunks: "all",
             maxInitialRequests: Infinity,
             minSize: 0,
             cacheGroups: {
@@ -89,6 +90,7 @@ module.exports = {
                         return isNeed
                     },
                     name: "chunk-vendors",
+                    // 优先级，多个分组冲突时决定把代码放在哪块
                     priority: 10,
                     enforce: true,
                 },
@@ -104,7 +106,7 @@ module.exports = {
                     name: "chunk-vuetify",
                     priority: 9,
                     enforce: true,
-                },
+                }
             },
         },
         minimizer: [],
