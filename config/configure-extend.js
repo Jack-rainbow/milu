@@ -1,5 +1,6 @@
 /*eslint-disable */
 const { src, dir } = require("./utils")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 module.exports = {
     devtool: "none", // webpack内关闭sourceMap(不打包.js.map)文件
     watch: true,
@@ -106,9 +107,19 @@ module.exports = {
                     name: "chunk-vuetify",
                     priority: 9,
                     enforce: true,
-                }
+                },
             },
         },
-        minimizer: [],
+        minimizer: [
+            // 压缩 CSS
+            new OptimizeCSSAssetsPlugin({
+                assetNameRegExp: /\.css$/g,
+                cssProcessor: require("cssnano"),
+                cssProcessorPluginOptions: {
+                    preset: ["default", { discardComments: { removeAll: true } }],
+                },
+                canPrint: true,
+            }),
+        ],
     },
 }

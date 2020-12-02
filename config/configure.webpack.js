@@ -1,5 +1,5 @@
 /*eslint-disable */
-const { isProduction, resolve } = require("./utils")
+const { isProduction, resolve, src } = require("./utils")
 const useAlias = require("./use-alias")
 const configureExtend = require("./configure-extend")
 // 打包包时间分析
@@ -12,7 +12,9 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin")
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin")
 const CompressionPlugin = require("compression-webpack-plugin")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const PurgecssPlugin = require("purgecss-webpack-plugin")
+const glob = require("glob")
 // 参考链接：https://zhuanlan.zhihu.com/p/42465502
 // page title
 const PAGE_NAME = "米鹿"
@@ -48,6 +50,10 @@ const prd_Config = {
     // parallel: require("os").cpus().length > 1,
     plugins: isProduction
         ? [
+              //擦除无用的 CSS
+              new PurgecssPlugin({
+                  paths: glob.sync(`${src}/**/*`, { nodir: true }),
+              }),
               // 提升二次构建速度
               new HardSourceWebpackPlugin({
                   // cacheDirectory是在高速缓存写入。默认情况下，将缓存存储在node_modules下的目录中，因此如
