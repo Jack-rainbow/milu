@@ -13,7 +13,6 @@ const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack
 const CompressionPlugin = require("compression-webpack-plugin")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
 // 参考链接：https://zhuanlan.zhihu.com/p/42465502
-
 // page title
 const PAGE_NAME = "米鹿"
 
@@ -32,7 +31,7 @@ const config = smp.wrap({
         // library: "[name]_library",
     },
     resolve: {
-        extensions: [".js", ".jsx", ".vue", ".json", "ts", "tsx"],
+        extensions: [".js", ".jsx", ".vue", "ts", "tsx"],
         modules: [resolve("node_modules")],
         alias: {
             set(name, path) {
@@ -51,10 +50,10 @@ const config = smp.wrap({
               new HardSourceWebpackPlugin({
                   // cacheDirectory是在高速缓存写入。默认情况下，将缓存存储在node_modules下的目录中，因此如
                   // 果清除了node_modules，则缓存也是如此
-                  cacheDirectory: "../build/node_modules/.cache/hard-source/[confighash]",
+                  cacheDirectory: "../node_modules/.cache/hard-source/[confighash]",
                   // Either an absolute path or relative to webpack's options.context.
                   // Sets webpack's recordsPath if not already set.
-                  recordsPath: "../build/node_modules/.cache/hard-source/[confighash]/records.json",
+                  recordsPath: "../node_modules/.cache/hard-source/[confighash]/records.json",
                   // configHash在启动webpack实例时转换webpack配置，并用于cacheDirectory为不同的webpack配
                   // 置构建不同的缓存
                   configHash: function (webpackConfig) {
