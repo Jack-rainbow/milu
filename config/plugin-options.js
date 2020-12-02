@@ -5,7 +5,7 @@ module.exports = {
   pluginOptions: {
     "style-resources-loader": {
       preProcessor: "scss",
-      patterns: [resolve(__dirname, "@/assets/scss/main.scss")],
+      patterns: [resolve("@/assets/scss/main.scss")],
     },
   },
   //配置全局样式变量(https://cli.vuejs.org/zh/guide/css.html#css-modules)

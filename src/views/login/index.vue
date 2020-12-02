@@ -11,11 +11,11 @@
             <p>用户登录</p>
             <div>
               <div>
-                <HomeOutlined />
+                <home-outlined />
                 使用微信登录
               </div>
               <div>
-                <MailOutlined />
+                <mail-outlined />
                 使用微博登录
               </div>
             </div>
