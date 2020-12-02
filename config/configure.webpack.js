@@ -1,5 +1,5 @@
 /*eslint-disable */
-const { isProduction, resolve, dir } = require("./utils")
+const { isProduction, resolve, src } = require("./utils")
 const useAlias = require("./use-alias")
 const configureExtend = require("./configure-extend")
 // 打包包时间分析
@@ -10,10 +10,11 @@ const MomentLocalesPlugin = require("moment-locales-webpack-plugin")
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin")
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin")
-const CompressionPlugin = require("compression-webpack-plugin")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const PurgecssPlugin = require("purgecss-webpack-plugin")
+const glob = require("glob")
 // 参考链接：https://zhuanlan.zhihu.com/p/42465502
-
 // page title
 const PAGE_NAME = "米鹿"
 
@@ -21,10 +22,11 @@ const PAGE_NAME = "米鹿"
 const externals = {
     vue: "Vue",
     vuex: "Vuex",
-    vueRouter: "vue-router",
+    "vue-router": "vue-router",
     axios: "axios",
+    moment: "moment",
 }
-const config = smp.wrap({
+const prd_Config = {
     name: PAGE_NAME,
     output: {
         // path: resolve("static"),
@@ -32,7 +34,7 @@ const config = smp.wrap({
         // library: "[name]_library",
     },
     resolve: {
-        extensions: [".js", ".jsx", ".vue", ".json", "ts", "tsx"],
+        extensions: [".js", ".jsx", ".vue", "ts", "tsx"],
         modules: [resolve("node_modules")],
         alias: {
             set(name, path) {
@@ -51,10 +53,10 @@ const config = smp.wrap({
               new HardSourceWebpackPlugin({
                   // cacheDirectory是在高速缓存写入。默认情况下，将缓存存储在node_modules下的目录中，因此如
                   // 果清除了node_modules，则缓存也是如此
-                  cacheDirectory: "../build/node_modules/.cache/hard-source/[confighash]",
+                  cacheDirectory: "../node_modules/.cache/hard-source/[confighash]",
                   // Either an absolute path or relative to webpack's options.context.
                   // Sets webpack's recordsPath if not already set.
-                  recordsPath: "../build/node_modules/.cache/hard-source/[confighash]/records.json",
+                  recordsPath: "../node_modules/.cache/hard-source/[confighash]/records.json",
                   // configHash在启动webpack实例时转换webpack配置，并用于cacheDirectory为不同的webpack配
                   // 置构建不同的缓存
                   configHash: function (webpackConfig) {
@@ -78,18 +80,20 @@ const config = smp.wrap({
               new MomentLocalesPlugin({
                   localesToKeep: ["zh-cn"],
               }),
-              //   压缩webpack插件(会增大包size-暂时隐藏)
-              //   new CompressionPlugin({
-              //       cache: true,
-              //       //   algorithm: "gzip", //开启gzip
-              //       test: /\.js$|\.html$|\.css/,
-              //   }),
+
+              new HtmlWebpackPlugin(),
               new LodashModuleReplacementPlugin(), //优化lodash
+              //擦除无用的 CSS
+              new PurgecssPlugin({
+                  only: ["bundle", "vendor"],
+                  paths: glob.sync(`${src}/**/*`, { nodir: true }),
+              }),
               new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
           ]
         : [],
     ...configureExtend,
-})
+}
+const config = isProduction ? smp.wrap(prd_Config) : prd_Config
 
 useAlias(config)
 delete config.resolve.alias.set

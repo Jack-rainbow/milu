@@ -1,13 +1,7 @@
 /*eslint-disable */
-const { resolve, isProduction } = require("./utils")
+const { isProduction } = require("./utils")
 
 module.exports = {
-  pluginOptions: {
-    "style-resources-loader": {
-      preProcessor: "scss",
-      patterns: [resolve(__dirname, "@/assets/scss/main.scss")],
-    },
-  },
   //配置全局样式变量(https://cli.vuejs.org/zh/guide/css.html#css-modules)
   css: {
     // 是否使用css分离插件 ExtractTextPlugin

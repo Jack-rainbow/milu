@@ -4,10 +4,7 @@ import {
   Input,
   Modal,
   Button,
-  Radio,
   Form,
-  Menu,
-  Table
 } from "ant-design-vue"
 // 内部组件
 import SvgIcon from '@/components/svg-icon.vue'
@@ -27,9 +24,6 @@ const ant = {
     Vue.component(SvgIcon.name, SvgIcon)
     // other 其他组件
     Vue.component(Button.name, Button)
-    Vue.component(Table.name, Table)
-    Vue.use(Radio)
-    Vue.use(Menu)
     Vue.use(Form)
   },
 }
