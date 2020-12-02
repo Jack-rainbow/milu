@@ -10,7 +10,6 @@ const MomentLocalesPlugin = require("moment-locales-webpack-plugin")
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin")
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin")
-const CompressionPlugin = require("compression-webpack-plugin")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const PurgecssPlugin = require("purgecss-webpack-plugin")
@@ -50,10 +49,6 @@ const prd_Config = {
     // parallel: require("os").cpus().length > 1,
     plugins: isProduction
         ? [
-              //擦除无用的 CSS
-              new PurgecssPlugin({
-                  paths: glob.sync(`${src}/**/*`, { nodir: true }),
-              }),
               // 提升二次构建速度
               new HardSourceWebpackPlugin({
                   // cacheDirectory是在高速缓存写入。默认情况下，将缓存存储在node_modules下的目录中，因此如
@@ -85,14 +80,14 @@ const prd_Config = {
               new MomentLocalesPlugin({
                   localesToKeep: ["zh-cn"],
               }),
-              //   压缩webpack插件(会增大包size-暂时隐藏)
-              //   new CompressionPlugin({
-              //       cache: true,
-              //       //   algorithm: "gzip", //开启gzip
-              //       test: /\.js$|\.html$|\.css/,
-              //   }),
+
               new HtmlWebpackPlugin(),
               new LodashModuleReplacementPlugin(), //优化lodash
+              //擦除无用的 CSS
+              new PurgecssPlugin({
+                  only: ["bundle", "vendor"],
+                  paths: glob.sync(`${src}/**/*`, { nodir: true }),
+              }),
               new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // 配置忽略规则
           ]
         : [],
