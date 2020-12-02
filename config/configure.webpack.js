@@ -1,5 +1,5 @@
 /*eslint-disable */
-const { isProduction, resolve, dir } = require("./utils")
+const { isProduction, resolve } = require("./utils")
 const useAlias = require("./use-alias")
 const configureExtend = require("./configure-extend")
 // 打包包时间分析
@@ -25,7 +25,7 @@ const externals = {
     axios: "axios",
     moment: "moment",
 }
-const config = smp.wrap({
+const prd_Config = {
     name: PAGE_NAME,
     output: {
         // path: resolve("static"),
@@ -91,7 +91,8 @@ const config = smp.wrap({
           ]
         : [],
     ...configureExtend,
-})
+}
+const config = isProduction ? smp.wrap(prd_Config) : prd_Config
 
 useAlias(config)
 delete config.resolve.alias.set
